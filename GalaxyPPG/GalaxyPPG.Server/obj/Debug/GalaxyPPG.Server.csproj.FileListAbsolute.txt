@@ -1,0 +1,11 @@
+C:\Users\Lenovo\Documents\GitHub\vp_projekat\GalaxyPPG\GalaxyPPG.Server\bin\Debug\GalaxyPPG.Server.exe.config
+C:\Users\Lenovo\Documents\GitHub\vp_projekat\GalaxyPPG\GalaxyPPG.Server\bin\Debug\GalaxyPPG.Server.exe
+C:\Users\Lenovo\Documents\GitHub\vp_projekat\GalaxyPPG\GalaxyPPG.Server\bin\Debug\GalaxyPPG.Server.pdb
+C:\Users\Lenovo\Documents\GitHub\vp_projekat\GalaxyPPG\GalaxyPPG.Server\bin\Debug\GalaxyPPG.Common.dll
+C:\Users\Lenovo\Documents\GitHub\vp_projekat\GalaxyPPG\GalaxyPPG.Server\bin\Debug\GalaxyPPG.Common.pdb
+C:\Users\Lenovo\Documents\GitHub\vp_projekat\GalaxyPPG\GalaxyPPG.Server\obj\Debug\GalaxyPPG.Server.csproj.AssemblyReference.cache
+C:\Users\Lenovo\Documents\GitHub\vp_projekat\GalaxyPPG\GalaxyPPG.Server\obj\Debug\GalaxyPPG.Server.csproj.CoreCompileInputs.cache
+C:\Users\Lenovo\Documents\GitHub\vp_projekat\GalaxyPPG\GalaxyPPG.Server\obj\Debug\GalaxyPP.4BCE96BD.Up2Date
+C:\Users\Lenovo\Documents\GitHub\vp_projekat\GalaxyPPG\GalaxyPPG.Server\obj\Debug\GalaxyPPG.Server.exe
+C:\Users\Lenovo\Documents\GitHub\vp_projekat\GalaxyPPG\GalaxyPPG.Server\obj\Debug\GalaxyPPG.Server.pdb
+C:\Users\Lenovo\Documents\GitHub\vp_projekat\GalaxyPPG\GalaxyPPG.Server\obj\Debug\GalaxyPPG.Server.exe.config

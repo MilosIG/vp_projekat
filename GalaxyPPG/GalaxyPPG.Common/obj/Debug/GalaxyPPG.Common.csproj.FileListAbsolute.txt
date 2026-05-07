@@ -1,0 +1,6 @@
+C:\Users\Lenovo\Documents\GitHub\vp_projekat\GalaxyPPG\GalaxyPPG.Common\bin\Debug\GalaxyPPG.Common.dll
+C:\Users\Lenovo\Documents\GitHub\vp_projekat\GalaxyPPG\GalaxyPPG.Common\bin\Debug\GalaxyPPG.Common.pdb
+C:\Users\Lenovo\Documents\GitHub\vp_projekat\GalaxyPPG\GalaxyPPG.Common\obj\Debug\GalaxyPPG.Common.csproj.AssemblyReference.cache
+C:\Users\Lenovo\Documents\GitHub\vp_projekat\GalaxyPPG\GalaxyPPG.Common\obj\Debug\GalaxyPPG.Common.csproj.CoreCompileInputs.cache
+C:\Users\Lenovo\Documents\GitHub\vp_projekat\GalaxyPPG\GalaxyPPG.Common\obj\Debug\GalaxyPPG.Common.dll
+C:\Users\Lenovo\Documents\GitHub\vp_projekat\GalaxyPPG\GalaxyPPG.Common\obj\Debug\GalaxyPPG.Common.pdb
