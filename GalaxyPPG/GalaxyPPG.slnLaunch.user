@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "GalaxyPPG.Server\\GalaxyPPG.Server.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "GalaxyPPG.Client\\GalaxyPPG.Client.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
