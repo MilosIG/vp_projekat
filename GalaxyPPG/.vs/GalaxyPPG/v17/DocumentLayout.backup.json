@@ -3,11 +3,31 @@
   "WorkspaceRootPath": "C:\\Users\\Lenovo\\Documents\\GitHub\\vp_projekat\\GalaxyPPG\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C433D8CA-2CFD-4EAB-ABE2-D00393E22086}|GalaxyPPG.Common\\GalaxyPPG.Common.csproj|c:\\users\\lenovo\\documents\\github\\vp_projekat\\galaxyppg\\galaxyppg.common\\dataformatfault.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{D56F38C5-1AC1-44A7-A8EB-44ADC579CFC4}|GalaxyPPG.Server\\GalaxyPPG.Server.csproj|c:\\users\\lenovo\\documents\\github\\vp_projekat\\galaxyppg\\galaxyppg.server\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{D56F38C5-1AC1-44A7-A8EB-44ADC579CFC4}|GalaxyPPG.Server\\GalaxyPPG.Server.csproj|solutionrelative:galaxyppg.server\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D56F38C5-1AC1-44A7-A8EB-44ADC579CFC4}|GalaxyPPG.Server\\GalaxyPPG.Server.csproj|c:\\users\\lenovo\\documents\\github\\vp_projekat\\galaxyppg\\galaxyppg.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D56F38C5-1AC1-44A7-A8EB-44ADC579CFC4}|GalaxyPPG.Server\\GalaxyPPG.Server.csproj|solutionrelative:galaxyppg.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D56F38C5-1AC1-44A7-A8EB-44ADC579CFC4}|GalaxyPPG.Server\\GalaxyPPG.Server.csproj|c:\\users\\lenovo\\documents\\github\\vp_projekat\\galaxyppg\\galaxyppg.server\\ppgservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D56F38C5-1AC1-44A7-A8EB-44ADC579CFC4}|GalaxyPPG.Server\\GalaxyPPG.Server.csproj|solutionrelative:galaxyppg.server\\ppgservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C433D8CA-2CFD-4EAB-ABE2-D00393E22086}|GalaxyPPG.Common\\GalaxyPPG.Common.csproj|c:\\users\\lenovo\\documents\\github\\vp_projekat\\galaxyppg\\galaxyppg.common\\sessionmeta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C433D8CA-2CFD-4EAB-ABE2-D00393E22086}|GalaxyPPG.Common\\GalaxyPPG.Common.csproj|solutionrelative:galaxyppg.common\\sessionmeta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C433D8CA-2CFD-4EAB-ABE2-D00393E22086}|GalaxyPPG.Common\\GalaxyPPG.Common.csproj|C:\\Users\\Lenovo\\Documents\\GitHub\\vp_projekat\\GalaxyPPG\\galaxyppg.common\\ippgservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C433D8CA-2CFD-4EAB-ABE2-D00393E22086}|GalaxyPPG.Common\\GalaxyPPG.Common.csproj|solutionrelative:galaxyppg.common\\ippgservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C433D8CA-2CFD-4EAB-ABE2-D00393E22086}|GalaxyPPG.Common\\GalaxyPPG.Common.csproj|C:\\Users\\Lenovo\\Documents\\GitHub\\vp_projekat\\GalaxyPPG\\galaxyppg.common\\dataformatfault.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C433D8CA-2CFD-4EAB-ABE2-D00393E22086}|GalaxyPPG.Common\\GalaxyPPG.Common.csproj|solutionrelative:galaxyppg.common\\dataformatfault.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C433D8CA-2CFD-4EAB-ABE2-D00393E22086}|GalaxyPPG.Common\\GalaxyPPG.Common.csproj|c:\\users\\lenovo\\documents\\github\\vp_projekat\\galaxyppg\\galaxyppg.common\\validationfault.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{C433D8CA-2CFD-4EAB-ABE2-D00393E22086}|GalaxyPPG.Common\\GalaxyPPG.Common.csproj|C:\\Users\\Lenovo\\Documents\\GitHub\\vp_projekat\\GalaxyPPG\\galaxyppg.common\\validationfault.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C433D8CA-2CFD-4EAB-ABE2-D00393E22086}|GalaxyPPG.Common\\GalaxyPPG.Common.csproj|solutionrelative:galaxyppg.common\\validationfault.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -18,11 +38,75 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "App.config",
+              "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\GitHub\\vp_projekat\\GalaxyPPG\\GalaxyPPG.Server\\App.config",
+              "RelativeDocumentMoniker": "GalaxyPPG.Server\\App.config",
+              "ToolTip": "C:\\Users\\Lenovo\\Documents\\GitHub\\vp_projekat\\GalaxyPPG\\GalaxyPPG.Server\\App.config",
+              "RelativeToolTip": "GalaxyPPG.Server\\App.config",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2026-05-08T16:34:45.563Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\GitHub\\vp_projekat\\GalaxyPPG\\GalaxyPPG.Server\\Program.cs",
+              "RelativeDocumentMoniker": "GalaxyPPG.Server\\Program.cs",
+              "ToolTip": "C:\\Users\\Lenovo\\Documents\\GitHub\\vp_projekat\\GalaxyPPG\\GalaxyPPG.Server\\Program.cs",
+              "RelativeToolTip": "GalaxyPPG.Server\\Program.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAA8AAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-08T16:33:34.798Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PpgService.cs",
+              "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\GitHub\\vp_projekat\\GalaxyPPG\\GalaxyPPG.Server\\PpgService.cs",
+              "RelativeDocumentMoniker": "GalaxyPPG.Server\\PpgService.cs",
+              "ToolTip": "C:\\Users\\Lenovo\\Documents\\GitHub\\vp_projekat\\GalaxyPPG\\GalaxyPPG.Server\\PpgService.cs",
+              "RelativeToolTip": "GalaxyPPG.Server\\PpgService.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAFEAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-08T16:28:34.297Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "SessionMeta.cs",
+              "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\GitHub\\vp_projekat\\GalaxyPPG\\GalaxyPPG.Common\\SessionMeta.cs",
+              "RelativeDocumentMoniker": "GalaxyPPG.Common\\SessionMeta.cs",
+              "ToolTip": "C:\\Users\\Lenovo\\Documents\\GitHub\\vp_projekat\\GalaxyPPG\\GalaxyPPG.Common\\SessionMeta.cs",
+              "RelativeToolTip": "GalaxyPPG.Common\\SessionMeta.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T12:53:31.99Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IPpgService.cs",
+              "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\GitHub\\vp_projekat\\GalaxyPPG\\GalaxyPPG.Common\\IPpgService.cs",
+              "RelativeDocumentMoniker": "GalaxyPPG.Common\\IPpgService.cs",
+              "ToolTip": "C:\\Users\\Lenovo\\Documents\\GitHub\\vp_projekat\\GalaxyPPG\\GalaxyPPG.Common\\IPpgService.cs",
+              "RelativeToolTip": "GalaxyPPG.Common\\IPpgService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T12:53:07.855Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "ValidationFault.cs",
               "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\GitHub\\vp_projekat\\GalaxyPPG\\GalaxyPPG.Common\\ValidationFault.cs",
               "RelativeDocumentMoniker": "GalaxyPPG.Common\\ValidationFault.cs",
@@ -30,21 +114,19 @@
               "RelativeToolTip": "GalaxyPPG.Common\\ValidationFault.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-07T11:52:24.461Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-07T11:52:24.461Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 5,
               "Title": "DataFormatFault.cs",
               "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\GitHub\\vp_projekat\\GalaxyPPG\\GalaxyPPG.Common\\DataFormatFault.cs",
               "RelativeDocumentMoniker": "GalaxyPPG.Common\\DataFormatFault.cs",
               "ToolTip": "C:\\Users\\Lenovo\\Documents\\GitHub\\vp_projekat\\GalaxyPPG\\GalaxyPPG.Common\\DataFormatFault.cs",
               "RelativeToolTip": "GalaxyPPG.Common\\DataFormatFault.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAABJAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-07T11:51:47.494Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-07T11:51:47.494Z"
             }
           ]
         }
