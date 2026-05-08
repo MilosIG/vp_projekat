@@ -16,6 +16,16 @@ namespace GalaxyPPG.Client
 
             IPpgService proxy = factory.CreateChannel();
 
+            CsvPpgReader reader = new CsvPpgReader();
+
+            //OVO TREBA PROMJENITI KASNIJE U 5. ZADATKA!!!
+            List<PpgSample> samples = reader.ReadSamples(
+                @"C:\Users\Lenovo\Desktop\test_ppg.csv",
+                "P01"
+            );
+
+            Console.WriteLine("Loaded samples: " + samples.Count);
+
             SessionMeta meta = new SessionMeta
             {
                 ParticipantId = "P01",
@@ -24,28 +34,20 @@ namespace GalaxyPPG.Client
                 TimestampOffsetMs = 0
             };
 
-            PpgSample sample = new PpgSample
-            {
-                TimestampMs = 1000,
-                PpgGreen = 1200,
-                PpgRed = 1100,
-                PpgIr = 1000,
-                AccX = 0.1,
-                AccY = 0.2,
-                AccZ = 0.9,
-                HeartRate = 75,
-                IBI_ms = 800,
-                ParticipantId = "P01",
-                RowIndex = 1
-            };
+            
 
             try
             {
                 proxy.StartSession(meta);
-                proxy.PushSample(sample);
+
+                foreach (PpgSample sample in samples)
+                {
+                    proxy.PushSample(sample);
+                }
+
                 proxy.EndSession();
 
-                Console.WriteLine("Test sample je uspesno poslat.");
+                Console.WriteLine("CSV samples su uspesno poslati.");
             }
             catch (FaultException<DataFormatFault> e)
             {
