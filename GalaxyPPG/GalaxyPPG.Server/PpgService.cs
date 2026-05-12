@@ -58,6 +58,20 @@ namespace GalaxyPPG.Server
 
         private void ValidateSample(PpgSample sample)
         {
+            if (currentSession == null)
+            {
+                throw new FaultException<ValidationFault>(
+                    new ValidationFault("Sesija nije pokrenuta. Prvo pozvati StartSession.")
+                );
+            }
+
+            if (sample.TimestampMs < 0)
+            {
+                throw new FaultException<ValidationFault>(
+                    new ValidationFault("TimestampMs mora biti veci ili jednak 0.")
+                );
+            }
+
             if (sample.HeartRate < 30 || sample.HeartRate > 220)
             {
                 throw new FaultException<ValidationFault>(

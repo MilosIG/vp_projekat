@@ -11,16 +11,29 @@ namespace GalaxyPPG.Server
     {
         static void Main(string[] args)
         {
-            ServiceHost host = new ServiceHost(typeof(PpgService));
+            ServiceHost host = null;
 
-            host.Open();
+            try
+            {
+                host = new ServiceHost(typeof(PpgService));
+                host.Open();
 
-            Console.WriteLine("PpgService is started.");
-            Console.WriteLine("Press <enter> to stop service.");
+                Console.WriteLine("PpgService is started.");
+                Console.WriteLine("Press <enter> to stop service.");
 
-            Console.ReadLine();
+                Console.ReadLine();
 
-            host.Close();
+                host.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("ERROR : " + e.Message);
+
+                if (host != null)
+                {
+                    host.Abort();
+                }
+            }
         }
     }
 }
