@@ -11,22 +11,22 @@ namespace GalaxyPPG.Common
     public class PpgSample
     {
         long timestampMs;
-        double ppgGreen;
-        double ppgRed;
-        double ppgIr;
-        double accX;
-        double accY;
-        double accZ;
-        double heartRate;
-        double ibi_ms;
+        double? ppgGreen;
+        double? ppgRed;
+        double? ppgIr;
+        double? accX;
+        double? accY;
+        double? accZ;
+        double? heartRate;
+        double? ibi_ms;
         string participantId;
         int rowIndex;
 
         public PpgSample() : this(0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0) { }
 
-        public PpgSample(long timestampMs, double ppgGreen, double ppgRed, double ppgIr,
-            double accX, double accY, double accZ, double heartRate,
-            double ibi_ms, string participantId, int rowIndex)
+        public PpgSample(long timestampMs, double? ppgGreen, double? ppgRed, double? ppgIr,
+            double? accX, double? accY, double? accZ, double? heartRate,
+            double? ibi_ms, string participantId, int rowIndex)
         {
             this.timestampMs = timestampMs;
             this.ppgGreen = ppgGreen;
@@ -45,28 +45,28 @@ namespace GalaxyPPG.Common
         public long TimestampMs { get => timestampMs; set => timestampMs = value; }
 
         [DataMember]
-        public double PpgGreen { get => ppgGreen; set => ppgGreen = value; }
+        public double? PpgGreen { get => ppgGreen; set => ppgGreen = value; }
 
         [DataMember]
-        public double PpgRed { get => ppgRed; set => ppgRed = value; }
+        public double? PpgRed { get => ppgRed; set => ppgRed = value; }
 
         [DataMember]
-        public double PpgIr { get => ppgIr; set => ppgIr = value; }
+        public double? PpgIr { get => ppgIr; set => ppgIr = value; }
 
         [DataMember]
-        public double AccX { get => accX; set => accX = value; }
+        public double? AccX { get => accX; set => accX = value; }
 
         [DataMember]
-        public double AccY { get => accY; set => accY = value; }
+        public double? AccY { get => accY; set => accY = value; }
 
         [DataMember]
-        public double AccZ { get => accZ; set => accZ = value; }
+        public double? AccZ { get => accZ; set => accZ = value; }
 
         [DataMember]
-        public double HeartRate { get => heartRate; set => heartRate = value; }
+        public double? HeartRate { get => heartRate; set => heartRate = value; }
 
         [DataMember]
-        public double IBI_ms { get => ibi_ms; set => ibi_ms = value; }
+        public double? IBI_ms { get => ibi_ms; set => ibi_ms = value; }
 
         [DataMember]
         public string ParticipantId { get => participantId; set => participantId = value; }

@@ -72,21 +72,23 @@ namespace GalaxyPPG.Server
                 );
             }
 
-            if (sample.HeartRate < 30 || sample.HeartRate > 220)
+            if (sample.HeartRate.HasValue && (sample.HeartRate.Value < 30 || sample.HeartRate.Value > 220))
             {
                 throw new FaultException<ValidationFault>(
                     new ValidationFault("HeartRate nije u opsegu [30, 220].")
                 );
             }
 
-            if (sample.PpgGreen < 0 || sample.PpgRed < 0 || sample.PpgIr < 0)
+            if ((sample.PpgGreen.HasValue && sample.PpgGreen.Value < 0) ||
+                (sample.PpgRed.HasValue && sample.PpgRed.Value < 0) ||
+                (sample.PpgIr.HasValue && sample.PpgIr.Value < 0))
             {
                 throw new FaultException<ValidationFault>(
                     new ValidationFault("PPG vrijednosti moraju biti vece ili jednake 0.")
                 );
             }
 
-            if (sample.IBI_ms < 250 || sample.IBI_ms > 2000)
+            if (sample.IBI_ms.HasValue && (sample.IBI_ms.Value < 250 || sample.IBI_ms.Value > 2000))
             {
                 throw new FaultException<ValidationFault>(
                     new ValidationFault("IBI_ms nije u opsegu [250, 2000].")
