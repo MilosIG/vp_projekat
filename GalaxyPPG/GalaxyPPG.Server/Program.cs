@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GalaxyPPG.Server
 {
@@ -16,6 +12,7 @@ namespace GalaxyPPG.Server
             try
             {
                 host = new ServiceHost(typeof(PpgService));
+
                 host.Open();
 
                 Console.WriteLine("PpgService is started.");
@@ -23,7 +20,12 @@ namespace GalaxyPPG.Server
 
                 Console.ReadLine();
 
-                host.Close();
+                if (host.State != CommunicationState.Faulted)
+                {
+                    host.Close();
+                }
+
+                Console.WriteLine("ServiceHost uspjesno zatvoren.");
             }
             catch (Exception e)
             {
@@ -33,6 +35,15 @@ namespace GalaxyPPG.Server
                 {
                     host.Abort();
                 }
+            }
+            finally
+            {
+                if (host != null && host.State != CommunicationState.Closed)
+                {
+                    host.Abort();
+                }
+
+                Console.WriteLine("ServiceHost cleanup zavrsen.");
             }
         }
     }

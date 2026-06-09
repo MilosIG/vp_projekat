@@ -31,15 +31,21 @@ namespace GalaxyPPG.Client
                 return;
             }
 
+            bool simulateBreak = ReadSimulationOption();
+
             ChannelFactory<IPpgService> factory = null;
             IPpgService proxy = null;
+            IClientChannel channel = null;
+
             CsvPpgReader reader = new CsvPpgReader();
             int sentSamples = 0;
+            bool transferCompleted = false;
 
             try
             {
                 factory = new ChannelFactory<IPpgService>("PpgService");
                 proxy = factory.CreateChannel();
+                channel = proxy as IClientChannel;
 
                 List<PpgSample> samples = reader.ReadSamples(ppgFilePath, participantId);
 
@@ -55,6 +61,11 @@ namespace GalaxyPPG.Client
 
                 foreach (PpgSample sample in samples)
                 {
+                    if (simulateBreak && sentSamples == 5)
+                    {
+                        throw new Exception("Simulacija prekida prenosa nakon 5 poslatih uzoraka.");
+                    }
+
                     try
                     {
                         proxy.PushSample(sample);
@@ -71,19 +82,20 @@ namespace GalaxyPPG.Client
                 }
 
                 proxy.EndSession();
+                transferCompleted = true;
 
-                ((IClientChannel)proxy).Close();
-                factory.Close();
+                CloseClientChannel(channel);
+                CloseFactory(factory);
 
                 PrintSummary(ppgFilePath, reader.RejectedLogPath, reader.TotalDataRows, sentSamples, reader.RejectedRows);
             }
             catch (FaultException<DataFormatFault> e)
             {
-                Console.WriteLine("ERROR : " + e.Detail.Message);
+                Console.WriteLine("DATA FORMAT ERROR : " + e.Detail.Message);
             }
             catch (FaultException<ValidationFault> e)
             {
-                Console.WriteLine("ERROR : " + e.Detail.Message);
+                Console.WriteLine("VALIDATION ERROR : " + e.Detail.Message);
             }
             catch (Exception e)
             {
@@ -91,20 +103,15 @@ namespace GalaxyPPG.Client
             }
             finally
             {
-                if (proxy != null)
+                if (!transferCompleted)
                 {
-                    IClientChannel channel = proxy as IClientChannel;
-
-                    if (channel != null && channel.State != CommunicationState.Closed)
-                    {
-                        channel.Abort();
-                    }
+                    Console.WriteLine("Transfer nije kompletno zavrsen. Pokrece se cleanup resursa.");
                 }
 
-                if (factory != null && factory.State != CommunicationState.Closed)
-                {
-                    factory.Abort();
-                }
+                AbortClientChannel(channel);
+                AbortFactory(factory);
+
+                Console.WriteLine("WCF proxy/factory resursi su zatvoreni ili abortovani u finally bloku.");
             }
 
             Console.Read();
@@ -130,6 +137,14 @@ namespace GalaxyPPG.Client
 
                 Console.WriteLine("Pogresan unos. Dozvoljeni ucesnici su P01 do P24.");
             }
+        }
+
+        private static bool ReadSimulationOption()
+        {
+            Console.WriteLine("Da li zelite simulaciju prekida prenosa? DA/NE");
+            string answer = (Console.ReadLine() ?? "").Trim();
+
+            return string.Equals(answer, "DA", StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsValidParticipantId(string participantId)
@@ -182,6 +197,60 @@ namespace GalaxyPPG.Client
             }
 
             return candidates.Count == 0 ? null : candidates[0];
+        }
+
+        private static void CloseClientChannel(IClientChannel channel)
+        {
+            if (channel == null)
+            {
+                return;
+            }
+
+            if (channel.State != CommunicationState.Faulted &&
+                channel.State != CommunicationState.Closed)
+            {
+                channel.Close();
+            }
+        }
+
+        private static void CloseFactory(ChannelFactory<IPpgService> factory)
+        {
+            if (factory == null)
+            {
+                return;
+            }
+
+            if (factory.State != CommunicationState.Faulted &&
+                factory.State != CommunicationState.Closed)
+            {
+                factory.Close();
+            }
+        }
+
+        private static void AbortClientChannel(IClientChannel channel)
+        {
+            if (channel == null)
+            {
+                return;
+            }
+
+            if (channel.State != CommunicationState.Closed)
+            {
+                channel.Abort();
+            }
+        }
+
+        private static void AbortFactory(ChannelFactory<IPpgService> factory)
+        {
+            if (factory == null)
+            {
+                return;
+            }
+
+            if (factory.State != CommunicationState.Closed)
+            {
+                factory.Abort();
+            }
         }
 
         private static void PrintSummary(string ppgFilePath, string rejectedLogPath, int readRows, int sentSamples, int rejectedRows)

@@ -5,7 +5,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace GalaxyPPG.Client
 {
@@ -27,9 +26,8 @@ namespace GalaxyPPG.Client
             originalLines.Clear();
 
             using (StreamReader reader = new StreamReader(filePath))
-            using (StreamWriter rejectedWriter = new StreamWriter(rejectedLogPath, false, Encoding.UTF8))
+            using (RejectedCsvLogger rejectedLogger = new RejectedCsvLogger(rejectedLogPath, false))
             {
-                rejectedWriter.WriteLine("RowIndex,Reason,OriginalLine");
                 string header = reader.ReadLine();
                 Dictionary<string, int> columns = BuildColumnMap(header);
 
@@ -48,8 +46,9 @@ namespace GalaxyPPG.Client
                     }
                     catch (Exception e)
                     {
-                        WriteRejectedRow(rejectedWriter, rowIndex, e.Message, line);
+                        WriteRejectedRow(rejectedLogger, rowIndex, e.Message, line);
                     }
+
                     rowIndex++;
                 }
             }
@@ -59,9 +58,9 @@ namespace GalaxyPPG.Client
 
         public void AppendRejectedRow(int rowIndex, string reason, string originalLine)
         {
-            using (StreamWriter rejectedWriter = new StreamWriter(rejectedLogPath, true, Encoding.UTF8))
+            using (RejectedCsvLogger rejectedLogger = new RejectedCsvLogger(rejectedLogPath, true))
             {
-                WriteRejectedRow(rejectedWriter, rowIndex, reason, originalLine);
+                WriteRejectedRow(rejectedLogger, rowIndex, reason, originalLine);
             }
         }
 
@@ -78,7 +77,7 @@ namespace GalaxyPPG.Client
             PpgSample sample = new PpgSample();
 
             sample.TimestampMs = ParseTimestampMs(parts, columns);
-            sample.PpgGreen = ParseOptionalDouble(parts, columns, "ppggreen", "green", "ppg", "bvp");
+            sample.PpgGreen = ParseOptionalDouble(parts, columns, "ppggreen", "green", "ppg", "bvp", "value");
             sample.PpgRed = ParseOptionalDouble(parts, columns, "ppgred", "red");
             sample.PpgIr = ParseOptionalDouble(parts, columns, "ppgir", "ir", "infrared");
             sample.AccX = ParseOptionalDouble(parts, columns, "accx", "accelerometerx", "x");
@@ -132,6 +131,7 @@ namespace GalaxyPPG.Client
             }
 
             double timestamp = double.Parse(value, CultureInfo.InvariantCulture);
+
             if (Math.Abs(timestamp) < 100000000000)
             {
                 timestamp *= 1000;
@@ -158,6 +158,7 @@ namespace GalaxyPPG.Client
             foreach (string alias in aliases)
             {
                 int index;
+
                 if (columns.TryGetValue(NormalizeColumnName(alias), out index))
                 {
                     if (index >= parts.Length)
@@ -229,28 +230,10 @@ namespace GalaxyPPG.Client
             return values;
         }
 
-        private void WriteRejectedRow(StreamWriter rejectedWriter, int rowIndex, string reason, string originalLine)
+        private void WriteRejectedRow(RejectedCsvLogger rejectedLogger, int rowIndex, string reason, string originalLine)
         {
             RejectedRows++;
-            rejectedWriter.WriteLine(
-                EscapeCsv(rowIndex.ToString(CultureInfo.InvariantCulture)) + "," +
-                EscapeCsv(reason) + "," +
-                EscapeCsv(originalLine));
-        }
-
-        private string EscapeCsv(string value)
-        {
-            if (value == null)
-            {
-                return "";
-            }
-
-            if (value.Contains(",") || value.Contains("\"") || value.Contains("\r") || value.Contains("\n"))
-            {
-                return "\"" + value.Replace("\"", "\"\"") + "\"";
-            }
-
-            return value;
+            rejectedLogger.WriteRejectedRow(rowIndex, reason, originalLine);
         }
     }
 }
