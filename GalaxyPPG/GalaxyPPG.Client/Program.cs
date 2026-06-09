@@ -74,10 +74,14 @@ namespace GalaxyPPG.Client
                     catch (FaultException<DataFormatFault> e)
                     {
                         reader.AppendRejectedRow(sample.RowIndex, e.Detail.Message, reader.GetOriginalLine(sample.RowIndex));
+                        Console.WriteLine("Server odbio red " + sample.RowIndex + ": " + e.Detail.Message);
+                        continue;
                     }
                     catch (FaultException<ValidationFault> e)
                     {
                         reader.AppendRejectedRow(sample.RowIndex, e.Detail.Message, reader.GetOriginalLine(sample.RowIndex));
+                        Console.WriteLine("Server odbio red " + sample.RowIndex + ": " + e.Detail.Message);
+                        continue;
                     }
                 }
 
