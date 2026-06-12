@@ -2,13 +2,22 @@
 using System.ServiceModel;
 using System.IO;
 using GalaxyPPG.Common;
+using System.Configuration;
+using System.Globalization;
 
 namespace GalaxyPPG.Server
 {
     public class PpgService : IPpgService
     {
+        public static event EventHandler<TransferStartedEventArgs> OnTransferStarted;
+        public static event EventHandler<SampleReceivedEventArgs> OnSampleReceived;
+        public static event EventHandler<TransferCompletedEventArgs> OnTransferCompleted;
+        public static event EventHandler<WarningRaisedEventArgs> OnWarningRaised;
+
         private static SessionMeta currentSession;
         private static int receivedSamples = 0;
+        private static double? previousIbiMs;
+        private static int weakPpgCounter;
 
         private static StreamWriter sessionWriter;
         private static StreamWriter rejectsWriter;
@@ -24,6 +33,8 @@ namespace GalaxyPPG.Server
 
             currentSession = meta;
             receivedSamples = 0;
+            previousIbiMs = null;
+            weakPpgCounter = 0;
 
             string dateFolder = DateTime.Now.ToString("yyyy-MM-dd");
 
@@ -66,10 +77,13 @@ namespace GalaxyPPG.Server
             }
 
             Console.WriteLine("Transfer started.");
+            Console.WriteLine("Sequential sample transfer started.");
             Console.WriteLine("ParticipantId: " + meta.ParticipantId);
             Console.WriteLine("DeviceId: " + meta.DeviceId);
             Console.WriteLine("Session file: " + Path.GetFullPath(sessionPath));
             Console.WriteLine("Rejects file: " + Path.GetFullPath(rejectsPath));
+
+            RaiseTransferStarted(meta);
         }
 
         public void PushSample(PpgSample sample)
@@ -84,13 +98,19 @@ namespace GalaxyPPG.Server
             try
             {
                 ValidateSample(sample);
+                AnalyzeSample(sample);
 
                 receivedSamples++;
 
                 WriteValidSample(sample);
 
-                Console.WriteLine("Sample received: " + receivedSamples);
-                Console.WriteLine(sample.ToString());
+                RaiseSampleReceived(sample, receivedSamples);
+
+                if (ShouldPrintTransferProgress(receivedSamples))
+                {
+                    Console.WriteLine("Transfer in progress. Sample received: " + receivedSamples);
+                    Console.WriteLine(sample.ToString());
+                }
             }
             catch (FaultException<ValidationFault> ex)
             {
@@ -101,8 +121,16 @@ namespace GalaxyPPG.Server
 
         public void EndSession()
         {
+            SessionMeta completedSession = currentSession;
+            int completedSamples = receivedSamples;
+
             Console.WriteLine("Transfer completed.");
             Console.WriteLine("Received samples: " + receivedSamples);
+
+            if (completedSession != null)
+            {
+                RaiseTransferCompleted(completedSession, completedSamples);
+            }
 
             if (sessionWriter != null)
             {
@@ -120,6 +148,8 @@ namespace GalaxyPPG.Server
 
             currentSession = null;
             receivedSamples = 0;
+            previousIbiMs = null;
+            weakPpgCounter = 0;
         }
 
         private void WriteValidSample(PpgSample sample)
@@ -171,6 +201,11 @@ namespace GalaxyPPG.Server
             return "\"" + value.Replace("\"", "\"\"") + "\"";
         }
 
+        private static bool ShouldPrintTransferProgress(int receivedCount)
+        {
+            return receivedCount <= 5 || receivedCount % 1000 == 0;
+        }
+
         private void ValidateSample(PpgSample sample)
         {
             if (currentSession == null)
@@ -208,6 +243,171 @@ namespace GalaxyPPG.Server
                 throw new FaultException<ValidationFault>(
                     new ValidationFault("IBI_ms nije u opsegu [250, 2000].")
                 );
+            }
+        }
+
+        private void AnalyzeSample(PpgSample sample)
+        {
+            double hrMinBpm = ReadDoubleSetting("HrMinBpm", 50);
+            double hrMaxBpm = ReadDoubleSetting("HrMaxBpm", 180);
+            double accMotionThreshold = ReadDoubleSetting("AccMotionThreshold", 20);
+            double ibiOutOfRangePct = ReadDoubleSetting("IbiOutOfRangePct", 0.2);
+            double ppgMinSignalThreshold = ReadDoubleSetting("PpgMinSignalThreshold", 0.01);
+            int weakPpgConsecutiveRows = ReadIntSetting("WeakPpgConsecutiveRows", 5);
+
+            if (sample.HeartRate.HasValue && !double.IsNaN(sample.HeartRate.Value))
+            {
+                double heartRate = sample.HeartRate.Value;
+
+                if (heartRate < hrMinBpm || heartRate > hrMaxBpm)
+                {
+                    RaiseWarning(
+                        "HrOutOfRangeWarning",
+                        "HeartRate is outside configured range.",
+                        sample,
+                        heartRate);
+                }
+            }
+
+            if (sample.IBI_ms.HasValue && !double.IsNaN(sample.IBI_ms.Value))
+            {
+                double currentIbi = sample.IBI_ms.Value;
+
+                if (previousIbiMs.HasValue &&
+                    Math.Abs(currentIbi - previousIbiMs.Value) > ibiOutOfRangePct * previousIbiMs.Value)
+                {
+                    RaiseWarning(
+                        "IbiSpikeWarning",
+                        "IBI changed more than configured percentage.",
+                        sample,
+                        currentIbi);
+                }
+
+                previousIbiMs = currentIbi;
+            }
+
+            if (HasUsableValue(sample.AccX) && HasUsableValue(sample.AccY) && HasUsableValue(sample.AccZ))
+            {
+                double accX = sample.AccX.Value;
+                double accY = sample.AccY.Value;
+                double accZ = sample.AccZ.Value;
+                double anorm = Math.Sqrt(accX * accX + accY * accY + accZ * accZ);
+
+                if (anorm > accMotionThreshold)
+                {
+                    RaiseWarning(
+                        "ExcessiveMotionWarning",
+                        "Acceleration norm is above configured threshold.",
+                        sample,
+                        anorm);
+                }
+            }
+
+            if (HasUsableValue(sample.PpgGreen) && HasUsableValue(sample.PpgRed) && HasUsableValue(sample.PpgIr))
+            {
+                if (sample.PpgGreen.Value < ppgMinSignalThreshold &&
+                    sample.PpgRed.Value < ppgMinSignalThreshold &&
+                    sample.PpgIr.Value < ppgMinSignalThreshold)
+                {
+                    weakPpgCounter++;
+                }
+                else
+                {
+                    weakPpgCounter = 0;
+                }
+
+                if (weakPpgCounter > weakPpgConsecutiveRows)
+                {
+                    RaiseWarning(
+                        "WeakPpgWarning",
+                        "PPG signal is weak for more than configured consecutive rows.",
+                        sample,
+                        weakPpgCounter);
+                }
+            }
+        }
+
+        private static bool HasUsableValue(double? value)
+        {
+            return value.HasValue && !double.IsNaN(value.Value);
+        }
+
+        private static double ReadDoubleSetting(string key, double defaultValue)
+        {
+            string value = ConfigurationManager.AppSettings[key];
+            double parsedValue;
+
+            if (double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out parsedValue))
+            {
+                return parsedValue;
+            }
+
+            return defaultValue;
+        }
+
+        private static int ReadIntSetting(string key, int defaultValue)
+        {
+            string value = ConfigurationManager.AppSettings[key];
+            int parsedValue;
+
+            if (int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out parsedValue))
+            {
+                return parsedValue;
+            }
+
+            return defaultValue;
+        }
+
+        private void RaiseTransferStarted(SessionMeta meta)
+        {
+            EventHandler<TransferStartedEventArgs> handler = OnTransferStarted;
+
+            if (handler != null)
+            {
+                handler(this, new TransferStartedEventArgs(meta.ParticipantId, meta.DeviceId, DateTime.Now));
+            }
+        }
+
+        private void RaiseSampleReceived(PpgSample sample, int receivedCount)
+        {
+            EventHandler<SampleReceivedEventArgs> handler = OnSampleReceived;
+
+            if (handler != null)
+            {
+                handler(this, new SampleReceivedEventArgs(
+                    sample.ParticipantId,
+                    sample.TimestampMs,
+                    sample.RowIndex,
+                    receivedCount));
+            }
+        }
+
+        private void RaiseTransferCompleted(SessionMeta meta, int receivedCount)
+        {
+            EventHandler<TransferCompletedEventArgs> handler = OnTransferCompleted;
+
+            if (handler != null)
+            {
+                handler(this, new TransferCompletedEventArgs(
+                    meta.ParticipantId,
+                    meta.DeviceId,
+                    receivedCount,
+                    DateTime.Now));
+            }
+        }
+
+        private void RaiseWarning(string warningType, string message, PpgSample sample, double value)
+        {
+            EventHandler<WarningRaisedEventArgs> handler = OnWarningRaised;
+
+            if (handler != null)
+            {
+                handler(this, new WarningRaisedEventArgs(
+                    warningType,
+                    message,
+                    sample.ParticipantId,
+                    sample.TimestampMs,
+                    value));
             }
         }
     }

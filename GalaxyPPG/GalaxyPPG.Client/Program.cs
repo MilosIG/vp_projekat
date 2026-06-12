@@ -48,6 +48,7 @@ namespace GalaxyPPG.Client
                 channel = proxy as IClientChannel;
 
                 List<PpgSample> samples = reader.ReadSamples(ppgFilePath, participantId);
+                int totalSamples = samples.Count;
 
                 SessionMeta meta = new SessionMeta
                 {
@@ -56,6 +57,10 @@ namespace GalaxyPPG.Client
                     SampleRateHz = 25,
                     TimestampOffsetMs = 0
                 };
+
+                Console.WriteLine("Starting transfer...");
+                Console.WriteLine("Sequential streaming mode: sending samples one by one.");
+                Console.WriteLine("Total samples to send: " + totalSamples);
 
                 proxy.StartSession(meta);
 
@@ -68,6 +73,11 @@ namespace GalaxyPPG.Client
 
                     try
                     {
+                        if (ShouldPrintTransferProgress(sentSamples + 1, totalSamples))
+                        {
+                            Console.WriteLine("Sending sample " + (sentSamples + 1) + "/" + totalSamples + "...");
+                        }
+
                         proxy.PushSample(sample);
                         sentSamples++;
                     }
@@ -87,6 +97,9 @@ namespace GalaxyPPG.Client
 
                 proxy.EndSession();
                 transferCompleted = true;
+
+                Console.WriteLine("Transfer finished.");
+                Console.WriteLine("Total samples sent: " + sentSamples);
 
                 CloseClientChannel(channel);
                 CloseFactory(factory);
@@ -160,6 +173,13 @@ namespace GalaxyPPG.Client
 
             int number;
             return int.TryParse(participantId.Substring(1), out number) && number >= 1 && number <= 24;
+        }
+
+        private static bool ShouldPrintTransferProgress(int sampleNumber, int totalSamples)
+        {
+            return sampleNumber <= 5 ||
+                sampleNumber % 1000 == 0 ||
+                sampleNumber == totalSamples;
         }
 
         private static string FindPpgFile(string participantFolder)
