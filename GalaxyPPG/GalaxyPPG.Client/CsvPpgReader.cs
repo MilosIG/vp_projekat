@@ -53,6 +53,8 @@ namespace GalaxyPPG.Client
                 }
             }
 
+            EnrichSamplesWithSiblingFiles(filePath, samples);
+
             return samples;
         }
 
@@ -89,6 +91,129 @@ namespace GalaxyPPG.Client
             sample.RowIndex = rowIndex;
 
             return sample;
+        }
+
+        private void EnrichSamplesWithSiblingFiles(string mainFilePath, List<PpgSample> samples)
+        {
+            string directory = Path.GetDirectoryName(mainFilePath);
+
+            if (string.IsNullOrWhiteSpace(directory) || samples == null || samples.Count == 0)
+            {
+                return;
+            }
+
+            string accPath = Path.Combine(directory, "ACC.csv");
+            string hrPath = Path.Combine(directory, "HR.csv");
+            string ibiPath = Path.Combine(directory, "IBI.csv");
+
+            if (File.Exists(accPath))
+            {
+                FillAccValues(accPath, samples);
+            }
+
+            if (File.Exists(hrPath))
+            {
+                FillHeartRateValues(hrPath, samples);
+            }
+
+            if (File.Exists(ibiPath))
+            {
+                FillIbiValues(ibiPath, samples);
+            }
+        }
+
+        private void FillAccValues(string accPath, List<PpgSample> samples)
+        {
+            using (StreamReader reader = new StreamReader(accPath))
+            {
+                string header = reader.ReadLine();
+                Dictionary<string, int> columns = BuildColumnMap(header);
+
+                string line;
+                int sampleIndex = 0;
+
+                while ((line = reader.ReadLine()) != null && sampleIndex < samples.Count)
+                {
+                    try
+                    {
+                        string[] parts = SplitCsvLine(line).ToArray();
+
+                        samples[sampleIndex].AccX = ParseOptionalDouble(parts, columns, "accx", "accelerometerx", "x");
+                        samples[sampleIndex].AccY = ParseOptionalDouble(parts, columns, "accy", "accelerometery", "y");
+                        samples[sampleIndex].AccZ = ParseOptionalDouble(parts, columns, "accz", "accelerometerz", "z");
+                    }
+                    catch
+                    {
+                        
+                    }
+
+                    sampleIndex++;
+                }
+            }
+        }
+
+        private void FillHeartRateValues(string hrPath, List<PpgSample> samples)
+        {
+            using (StreamReader reader = new StreamReader(hrPath))
+            {
+                string header = reader.ReadLine();
+                Dictionary<string, int> columns = BuildColumnMap(header);
+
+                string line;
+                int sampleIndex = 0;
+
+                while ((line = reader.ReadLine()) != null && sampleIndex < samples.Count)
+                {
+                    try
+                    {
+                        string[] parts = SplitCsvLine(line).ToArray();
+
+                        samples[sampleIndex].HeartRate = ParseOptionalDouble(parts, columns, "heartrate", "hr", "bpm", "value");
+                    }
+                    catch
+                    {
+                        
+                    }
+
+                    sampleIndex++;
+                }
+            }
+        }
+
+        private void FillIbiValues(string ibiPath, List<PpgSample> samples)
+        {
+            using (StreamReader reader = new StreamReader(ibiPath))
+            {
+                string header = reader.ReadLine();
+                Dictionary<string, int> columns = BuildColumnMap(header);
+
+                string line;
+                int sampleIndex = 0;
+
+                while ((line = reader.ReadLine()) != null && sampleIndex < samples.Count)
+                {
+                    try
+                    {
+                        string[] parts = SplitCsvLine(line).ToArray();
+
+                        double? ibi = ParseOptionalDouble(parts, columns,
+                            "ibims", "ibi", "rrinterval", "value", "duration");
+
+                        if (ibi.HasValue)
+                        {
+                            ibi = ibi.Value / 1000.0;
+                        }
+
+                        samples[sampleIndex].IBI_ms = ibi;
+                    }
+                    catch
+                    {
+                        
+                    }
+
+                    sampleIndex++;
+                }
+            }
         }
 
         private Dictionary<string, int> BuildColumnMap(string header)
