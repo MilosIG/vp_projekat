@@ -58,9 +58,9 @@ namespace GalaxyPPG.Client
                     TimestampOffsetMs = 0
                 };
 
-                Console.WriteLine("Starting transfer...");
-                Console.WriteLine("Sequential streaming mode: sending samples one by one.");
-                Console.WriteLine("Total samples to send: " + totalSamples);
+                Console.WriteLine("Pokretanje prenosa...");
+                Console.WriteLine("Sekvencijalni režim prenosa: slanje uzoraka jedan po jedan.");
+                Console.WriteLine("Ukupan broj uzoraka za slanje: " + totalSamples);
 
                 proxy.StartSession(meta);
 
@@ -161,7 +161,14 @@ namespace GalaxyPPG.Client
             Console.WriteLine("Da li zelite simulaciju prekida prenosa? DA/NE");
             string answer = (Console.ReadLine() ?? "").Trim();
 
-            return string.Equals(answer, "DA", StringComparison.OrdinalIgnoreCase);
+            if (answer.ToUpper() == "DA")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private static bool IsValidParticipantId(string participantId)
